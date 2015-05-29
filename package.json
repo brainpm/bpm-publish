@@ -1,0 +1,27 @@
+{
+  "name": "bpm-publish",
+  "version": "1.0.0",
+  "description": "put your bundled brainpm episodes on gh-pages ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "brainpm",
+    "bpm"
+  ],
+  "author": "Jan Bölsche <jan@lagomorph.de> (http://regular.codes)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/regular/bpm-publish.git"
+  },
+  "bugs": {
+    "url": "https://github.com/regular/bpm-publish/issues"
+  },
+  "homepage": "https://github.com/regular/bpm-publish#readme",
+  "dependencies": {
+    "parse-git-config": "^0.3.1",
+    "shellby": "^0.2.0"
+  }
+}
