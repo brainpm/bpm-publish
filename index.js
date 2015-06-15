@@ -12,7 +12,7 @@ exports.publish = function(config, opts, repoDir, bundleDir, cb) {
     var repoUrl = gitConfig['remote "origin"'].url;
     debug('remote "origin" is at %s', repoUrl);
 
-    var deployDir = path.join(repoDir, '.bpm', 'deploy')
+    var deployDir = path.join(repoDir, '.bpm', 'deploy');
 
     // gh-pages seems to have trouble with abosulte paths
     bundleDir = path.relative(process.cwd(), bundleDir);
@@ -28,7 +28,7 @@ exports.publish = function(config, opts, repoDir, bundleDir, cb) {
         clone: deployDir
     }, function(err) {
         if (err) return cb(err);
-        var result = repoUrl.match(/.*:(.*)\/(.*)\.git$/);
+        var result = repoUrl.match(/.*:\/+(.*)\/(.*)\.git$/);
         var org = result[1];
         var repoName = result[2];
         cb(null, {
