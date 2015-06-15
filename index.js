@@ -1,16 +1,18 @@
 var path = require('path');
 var git = require('parse-git-config');
 var ghpages = require('gh-pages');
+var debug = require('debug')('bpm-publish');
 
 exports.publish = function(config, opts, repoDir, bundleDir, cb) {
     var gitConfig = git.sync({path: path.join(repoDir,'.git/config')});
     if (gitConfig === null) {
         return cb(new Error('This is not a git repository. Create one first and set a remote. The bpm bundle will be published on the gh-pages branch of this repository.'));
     }
+    debug('found local git repo');
     ghpages.publish(bundleDir, {
         /* tag: */
         logger: function(m) {
-            console.log(m);
+            debug(m);
         },
         message: 'auto publish',
         clone: path.join(bundleDir, '.clone')
