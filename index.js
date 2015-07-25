@@ -26,9 +26,9 @@ function isGitClean(repoDir, cb) {
 
 
 function ghpagesPublish(bundleDir, options, cb) {
-    ghpages.publish(bundleDir, options, function(err) {
+    ghpages.publish(bundleDir, options, function() {
         try {
-            cb(err);
+            cb.apply(null, arguments);
         } catch(e) {
             console.error(e.stack);
             process.exit(1);
