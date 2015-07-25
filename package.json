@@ -23,6 +23,7 @@
   "dependencies": {
     "debug": "^2.2.0",
     "gh-pages": "^0.3.0",
+    "github-url": "^1.2.0",
     "parse-git-config": "^0.3.1"
   }
 }
