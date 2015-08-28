@@ -1,2 +1,2 @@
 module.exports.publish = require('./lib/publish');
-module.exports.getEpisodeUrl = require('./lib/get-episode-urls');
+module.exports.getRetrievalStream = require('./lib/get-retrieval-stream');
