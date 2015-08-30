@@ -4,7 +4,7 @@
   "description": "put your bundled brainpm episodes on gh-pages ",
   "main": "index.js",
   "scripts": {
-    "test": "tape test/*.js|tap-spec"
+    "test": "tape test/*.js|tap-spec && browserify integration-test.js|testling|tap-spec"
   },
   "keywords": [
     "brainpm",
@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/regular/bpm-publish#readme",
   "dependencies": {
+    "JSONStream": "^1.0.4",
     "debug": "^2.2.0",
     "from2-array": "0.0.4",
     "gh-pages": "^0.3.0",
@@ -38,6 +39,7 @@
     "browserify": "^11.0.1",
     "concat-stream": "^1.5.0",
     "tap-spec": "^4.0.2",
-    "tape": "^4.0.1"
+    "tape": "^4.0.1",
+    "testling": "^1.7.1"
   }
 }
