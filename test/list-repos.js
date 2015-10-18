@@ -4,6 +4,36 @@ var concat = require('concat-stream');
 var test = require('tape');
 var result;
 
+function testCase2(body, options, cb) {
+    var statusCode = options.statusCode || 200;
+    var error = options.error || null;
+    var org = options.org || 'shecodes-content';
+    var name = options.name || 'jfr3000';
+    var headers = options.headers || {};
+    var netsArgs = null;
+
+    var hyperquestMock = function(opts) {
+        hyperquestArgs = arguments;
+        var stream = through(function() {
+            if (!error) {
+                this.emit('response', {statusCode: statusCode, headers: headers});
+                this.push(body);
+                this.push(null);
+            } else {
+                this.emit('error', error);
+            }
+        });
+    };
+
+    var stream = listRepos(org, name, {hyperquest: hyperquestMock});
+    stream.on('error', function(err) {
+        cb(err, null, hyperquestArgs);
+    });
+    stream.pipe(concat({encoding: 'object'},function(data) {
+        cb(null, data, hyperquestArgs);
+    }));
+}
+
 function testCase(body, options, cb) {
     var statusCode = options.statusCode || 200;
     var error = options.error || null;

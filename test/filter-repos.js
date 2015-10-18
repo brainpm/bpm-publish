@@ -1,7 +1,6 @@
+var pull = require('pull-stream');
 var test = require('tape');
 var filter = require('../lib/filter-repos');
-var concat = require('concat-stream');
-var from = require('from2-array');
 
  test('should reject repo that matches organisation name', function(t){
     var repos = [
@@ -21,10 +20,15 @@ var from = require('from2-array');
             has_pages: true
         }
     ];
-    var input = from.obj(repos).pipe(filter()).pipe(concat({encoding: 'object'}, function(arr) {
-        t.deepEqual(arr, [repos[0], repos[2]]);
-        t.end();
-    }));
+    pull(
+        pull.values(repos),
+        filter(),
+        pull.collect(function(err, arr) {
+            t.error(err);
+            t.deepEqual(arr, [repos[0], repos[2]]);
+            t.end();
+        })
+    );
 });
 
 test('should reject repos without gh-pages branch', function(t){
@@ -45,8 +49,13 @@ test('should reject repos without gh-pages branch', function(t){
             has_pages: true
         }
     ];
-    var input = from.obj(repos).pipe(filter()).pipe(concat({encoding: 'object'}, function(arr) {
-        t.deepEqual(arr, [repos[0], repos[2]]);
-        t.end();
-    }));
+    pull(
+        pull.values(repos),
+        filter(),
+        pull.collect(function(err, arr) {
+            t.error(err);
+            t.deepEqual(arr, [repos[0], repos[2]]);
+            t.end();
+        })
+    );
 });

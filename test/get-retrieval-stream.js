@@ -1,6 +1,6 @@
 var getRetrievalStream = require('../lib/get-retrieval-stream');
+var pull = require('pull-stream');
 var through = require('through');
-var concat = require('concat-stream');
 var test = require('tape');
 var result;
 
@@ -12,20 +12,28 @@ function testCase(body, options, cb) {
 
     var netsArgs = null;
 
-    var netsMock = function(opts, cb) {
+    var hyperquestMock = function(opts, cb) {
         netsArgs = arguments;
-        process.nextTick(function() {
-            cb(error, {statusCode: statusCode}, body);
+        var responseStream = through(function(data) {
+            this.emit('response', {statusCode: data.statusCode, headers: {}});
+            this.push(data.body);
+            this.push(null);
         });
+        (function(body, headers) {
+            setTimeout(function() {
+                responseStream.write({statusCode: statusCode, body: body});
+            }, 250);
+        })(body, statusCode);
+        responseStream.setHeader = function() {};
+        return responseStream;
     };
 
-    var stream = getRetrievalStream(org, name, {nets: netsMock});
-    stream.on('error', function(err) {
-        cb(err, null, netsArgs);
-    });
-    stream.pipe(concat({encoding: 'object'},function(data) {
-        cb(null, data, netsArgs);
-    }));
+    pull(
+        getRetrievalStream(org, name, {request: hyperquestMock}),
+        pull.collect(function(err, data) {
+            cb(err, data, netsArgs);
+        })
+    );
 }
 
 test('should return stream of {name, getFileStream()} objects', function(t) {
